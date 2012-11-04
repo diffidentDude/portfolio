@@ -194,7 +194,7 @@
                     view : document.createElement('div'),
                     slider : window.document.createElement('div'),
                     button : window.document.createElement('div'),
-                    slideToUnlock : window.document.createElement('svg'),
+                    slideToUnlock : window.document.createElement('div'),
                     text : 'slide to unlock',
                     render : function (slideToUnlock, gradient, text) {
                         var slideToUnlockContext = slideToUnlock.getContext('2d');
@@ -232,7 +232,7 @@
                                     buttonWidth = $(thiz.button).width(), 
                                     rightLimit = sliderWidth - (buttonWidth - leftLimit), 
                                     position = thiz.getPosition((-buttonWidth / 2 + leftLimit + e.pageX - $(thiz.slider).offset().left), leftLimit, rightLimit), 
-                                    transparency = 1 - position * 4 / sliderWidth;
+                                    transparency = Math.round((1 - position * 4 / sliderWidth) * 100) / 100;
 
                                 $(thiz.slider).attr('value', Math.round((position / rightLimit) * 100));
                                 $(thiz.button).css({'left': position + 'px'});
@@ -265,10 +265,11 @@
                         this.slider.className = 'locked';
                         this.button.className = 'button';
 
-                        this.slider.innerHTML = '<svg id="slideToUnlock" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><text y="31" x="90">slide to unlock</text></svg>';
+                        this.slideToUnlock.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><text y="31" x="90">slide to unlock</text></svg>';
+                        this.slideToUnlock.id = 'slideToUnlock';
+                        this.slider.appendChild(this.slideToUnlock);
                         this.slider.appendChild(this.button);
                         this.view.appendChild(this.slider);
-                        this.slideToUnlock = document.getElementById('slideToUnlock');
 
                         $(this.button).mousedown(function (e) {
                             $('#slider').addClass('active');
@@ -355,41 +356,6 @@
                 }
             },
             canvas : {
-                generateGradients : function (context) {
-                    var lighter = "rgba(255,255,255,0.8)", middle = "rgba(242,242,242,0.6)", darker = "rgba(230,230,230,0.5)", total = 58, borderWidth = 3, colorStops = 42, position = -1, insetWidth = 10, i = 0, j, gradient, gradients = Gradients();
-
-                    for (i; i < total; i++) {
-                        gradient = context.createLinearGradient(250, 0, 85, 0);
-
-                        //Left Background
-                        for (j = 0; j >= 0 && j <= colorStops && j < position - (insetWidth + borderWidth * 2); j++) {
-                            gradient.addColorStop(j / colorStops, darker);
-                        }
-
-                        //Left Border
-                        for (j = (position - (insetWidth + borderWidth * 2)) + 1; j >= 0 && j <= colorStops && j < position - (insetWidth + borderWidth); j++) {
-                            gradient.addColorStop(j / colorStops, middle);
-                        }
-
-                        //Inset
-                        for (j = (position - (insetWidth + borderWidth)) + 1; j >= 0 && j <= colorStops && j < position - borderWidth; j++) {
-                            gradient.addColorStop(j / colorStops, lighter);
-                        }
-
-                        //Right Border
-                        for (j = (position - borderWidth) + 1; j >= 0 && j <= colorStops && j < position; j++) {
-                            gradient.addColorStop(j / colorStops, middle);
-                        }
-
-                        //Right Background
-                        for (j = position + 1; j >= 0 && j <= colorStops && j < colorStops; j++) {
-                            gradient.addColorStop(j / colorStops, darker);
-                        }
-                        gradients.add(gradient);
-                        position++;
-                    }
-                    return gradients;
-                },
                 drawLock : function (status) {
                     var ctx = status.getContext('2d');
                     ctx.fillStyle = 'rgba(255,255,255,0.6)';
@@ -605,6 +571,7 @@
                 $(this.service.home.view).addClass('maximised');
                 if (this.application !== undefined) {
                     $('#applicationContainer').addClass('maximised');
+                    this.utility.statusBar.addClass(this.application.statusClass || "black");
                 }
                 this.locked = false;
                 if (iPad.service.home.viginLaunch) {
