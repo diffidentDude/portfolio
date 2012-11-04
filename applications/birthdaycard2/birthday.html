@@ -88,77 +88,77 @@
 					var handleLength = KAPPA * balloons[i].size, radius = balloons[i].size, centerX = 0, centerY = 0;
 
 
-// Begin balloon path
+					// Begin balloon path
 
-ctx.beginPath();
+					ctx.beginPath();
 
-// Top Left Curve
-        
-var topLeftCurveStartX = centerX - radius;
-var topLeftCurveStartY = centerY;
-        
-var topLeftCurveEndX = centerX;
-var topLeftCurveEndY = centerY - radius;
-        
-ctx.moveTo(topLeftCurveStartX, topLeftCurveStartY);
-ctx.bezierCurveTo(topLeftCurveStartX, topLeftCurveStartY - handleLength,
-                        topLeftCurveEndX - handleLength, topLeftCurveEndY,
-                        topLeftCurveEndX, topLeftCurveEndY);
-                                                        
-// Top Right Curve
-        
-var topRightCurveStartX = centerX;
-var topRightCurveStartY = centerY - radius;
-        
-var topRightCurveEndX = centerX + radius;
-var topRightCurveEndY = centerY;
-        
-ctx.bezierCurveTo(topRightCurveStartX + handleLength, topRightCurveStartY,
-                        topRightCurveEndX, topRightCurveEndY - handleLength,
-                        topRightCurveEndX, topRightCurveEndY);
-                                                                                
-var heightDiff = (radius * 0.4);
+					// Top Left Curve
+					        
+					var topLeftCurveStartX = centerX - radius;
+					var topLeftCurveStartY = centerY;
+					        
+					var topLeftCurveEndX = centerX;
+					var topLeftCurveEndY = centerY - radius;
+					        
+					ctx.moveTo(topLeftCurveStartX, topLeftCurveStartY);
+					ctx.bezierCurveTo(topLeftCurveStartX, topLeftCurveStartY - handleLength,
+					                        topLeftCurveEndX - handleLength, topLeftCurveEndY,
+					                        topLeftCurveEndX, topLeftCurveEndY);
+					                                                        
+					// Top Right Curve
+					        
+					var topRightCurveStartX = centerX;
+					var topRightCurveStartY = centerY - radius;
+					        
+					var topRightCurveEndX = centerX + radius;
+					var topRightCurveEndY = centerY;
+					        
+					ctx.bezierCurveTo(topRightCurveStartX + handleLength, topRightCurveStartY,
+					                        topRightCurveEndX, topRightCurveEndY - handleLength,
+					                        topRightCurveEndX, topRightCurveEndY);
+					                                                                                
+					var heightDiff = (radius * 0.4);
 
-var balloonBottomY = centerY + radius + heightDiff
+					var balloonBottomY = centerY + radius + heightDiff
 
-// Updated Bottom Right Curve Value
-var bottomRightCurveEndY = balloonBottomY;
+					// Updated Bottom Right Curve Value
+					var bottomRightCurveEndY = balloonBottomY;
 
-// Updated Bottom Left Curve Value
-var bottomLeftCurveStartY = balloonBottomY;
+					// Updated Bottom Left Curve Value
+					var bottomLeftCurveStartY = balloonBottomY;
 
 
-// Bottom Right Curve
+					// Bottom Right Curve
+					        
+					var bottomRightCurveStartX = centerX + radius;
+					var bottomRightCurveStartY = centerY;
+					        
+					var bottomRightCurveEndX = centerX;
+					        
+					ctx.bezierCurveTo(bottomRightCurveStartX, bottomRightCurveStartY + handleLength,
+					                        bottomRightCurveEndX + handleLength, bottomRightCurveEndY,
+					                        bottomRightCurveEndX, bottomRightCurveEndY);                                                    
+					        
+					// Bottom Left Curve
+					        
+					var bottomLeftCurveStartX = centerX;
         
-var bottomRightCurveStartX = centerX + radius;
-var bottomRightCurveStartY = centerY;
-        
-var bottomRightCurveEndX = centerX;
-        
-ctx.bezierCurveTo(bottomRightCurveStartX, bottomRightCurveStartY + handleLength,
-                        bottomRightCurveEndX + handleLength, bottomRightCurveEndY,
-                        bottomRightCurveEndX, bottomRightCurveEndY);                                                    
-        
-// Bottom Left Curve
-        
-var bottomLeftCurveStartX = centerX;
-        
-		var bottomLeftCurveEndX = centerX - radius;
-		var bottomLeftCurveEndY = centerY;
-        
-		ctx.bezierCurveTo(bottomLeftCurveStartX - handleLength, bottomLeftCurveStartY,
-                        bottomLeftCurveEndX, bottomLeftCurveEndY + handleLength,
-                        bottomLeftCurveEndX, bottomLeftCurveEndY);
+					var bottomLeftCurveEndX = centerX - radius;
+					var bottomLeftCurveEndY = centerY;
+			        
+					ctx.bezierCurveTo(bottomLeftCurveStartX - handleLength, bottomLeftCurveStartY,
+			                        bottomLeftCurveEndX, bottomLeftCurveEndY + handleLength,
+			                        bottomLeftCurveEndX, bottomLeftCurveEndY);
 
-		ctx.moveTo(centerX, balloonBottomY);
-		ctx.lineTo(centerX + 5, balloonBottomY + 10);
-		ctx.lineTo(centerX + -5, balloonBottomY + 10);
-		ctx.lineTo(centerX, balloonBottomY);
+					ctx.moveTo(centerX, balloonBottomY);
+					ctx.lineTo(centerX + 5, balloonBottomY + 10);
+					ctx.lineTo(centerX + -5, balloonBottomY + 10);
+					ctx.lineTo(centerX, balloonBottomY);
 
-		ctx.fillStyle = balloons[i].color;
-        ctx.fill();
-        ctx.stroke();
-        ctx.restore();
+					ctx.fillStyle = balloons[i].color;
+			        ctx.fill();
+			        // ctx.stroke();
+			        ctx.restore();
 				}
 				
 			}());
