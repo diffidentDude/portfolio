@@ -1,0 +1,178 @@
+<html>
+<head>
+	<style>
+		html, body {
+			padding:0;
+			margin:0;
+			overflow:hidden;
+			font-family: "American Typewriter";
+			font-weight:400;
+		}
+
+		.message {
+			position: absolute;
+			height:100%;
+			width:100%;
+		}
+
+		h1, p {
+			font-weight:400;
+			
+			color: white;
+			text-align: center;
+		}
+
+		h1 {
+			font-size: 5em;	
+		}
+
+		p {
+			font-size: 3em;
+		}
+	</style>
+</head>
+<body>
+	<div class="message">
+		<p>love from, Nate + Mon xxxoo</p>
+		<h1>Joyeux Anniversaire</h1>
+		<p>we would like to wish you the best birthday ever!</p>
+	</div>
+	<canvas id="joyux"></canvas>
+	<script type="text/javascript">
+		(function() {
+			window.requestAnimFrame = (function() {
+    			return  window.requestAnimationFrame ||
+        			window.webkitRequestAnimationFrame ||
+        			window.mozRequestAnimationFrame ||
+        			window.oRequestAnimationFrame ||
+        			window.msRequestAnimationFrame ||
+        			function(callback) {
+            			window.setTimeout(callback, 1000 / 60);
+        			};
+			})();
+
+
+			var joyux = document.getElementById("joyux"), ctx = joyux.getContext('2d'), HEIGHT = document.height, WIDTH = document.width, KAPPA = (4 * (Math.sqrt(2) - 1))/3;
+			joyux.height = HEIGHT;
+			joyux.width = WIDTH;
+
+			var balloons = [];
+
+			for (var i = 0; i < WIDTH/20; i++) {
+				balloons.push(balloon());
+			}
+
+			(function balloonLoop() {
+				requestAnimFrame(balloonLoop);
+				for (var i = 0; i < balloons.length; i++) {
+					// balloons[i].angle.value += balloons[i].angle.sign / Math.abs(Math.pow(balloons[i].angle.value === 0 ? 1 : balloons[i].angle.value, 0.5));
+					// if (balloons[i].angle.value >= 30 || balloons[i].angle.value <= -30) {
+					// 	balloons[i].angle.sign = -balloons[i].angle.sign;
+					// }
+
+					if (balloons[i].position.y < -200) {
+						balloons[i].position.y = (HEIGHT + 200);
+					} else {
+						balloons[i].position.y = balloons[i].position.y - balloons[i].speed;
+					}
+				}
+			}());
+
+			(function animationLoop() {
+				requestAnimFrame(animationLoop);
+				ctx.clearRect(0, 0, WIDTH, HEIGHT);
+				for (var i = 0; i < balloons.length; i++) {
+					ctx.save();
+					ctx.translate(balloons[i].position.x, balloons[i].position.y);
+        			ctx.rotate(balloons[i].angle.value * Math.PI / 180);
+					var handleLength = KAPPA * balloons[i].size, radius = balloons[i].size, centerX = 0, centerY = 0;
+
+
+// Begin balloon path
+
+ctx.beginPath();
+
+// Top Left Curve
+        
+var topLeftCurveStartX = centerX - radius;
+var topLeftCurveStartY = centerY;
+        
+var topLeftCurveEndX = centerX;
+var topLeftCurveEndY = centerY - radius;
+        
+ctx.moveTo(topLeftCurveStartX, topLeftCurveStartY);
+ctx.bezierCurveTo(topLeftCurveStartX, topLeftCurveStartY - handleLength,
+                        topLeftCurveEndX - handleLength, topLeftCurveEndY,
+                        topLeftCurveEndX, topLeftCurveEndY);
+                                                        
+// Top Right Curve
+        
+var topRightCurveStartX = centerX;
+var topRightCurveStartY = centerY - radius;
+        
+var topRightCurveEndX = centerX + radius;
+var topRightCurveEndY = centerY;
+        
+ctx.bezierCurveTo(topRightCurveStartX + handleLength, topRightCurveStartY,
+                        topRightCurveEndX, topRightCurveEndY - handleLength,
+                        topRightCurveEndX, topRightCurveEndY);
+                                                                                
+var heightDiff = (radius * 0.4);
+
+var balloonBottomY = centerY + radius + heightDiff
+
+// Updated Bottom Right Curve Value
+var bottomRightCurveEndY = balloonBottomY;
+
+// Updated Bottom Left Curve Value
+var bottomLeftCurveStartY = balloonBottomY;
+
+
+// Bottom Right Curve
+        
+var bottomRightCurveStartX = centerX + radius;
+var bottomRightCurveStartY = centerY;
+        
+var bottomRightCurveEndX = centerX;
+        
+ctx.bezierCurveTo(bottomRightCurveStartX, bottomRightCurveStartY + handleLength,
+                        bottomRightCurveEndX + handleLength, bottomRightCurveEndY,
+                        bottomRightCurveEndX, bottomRightCurveEndY);                                                    
+        
+// Bottom Left Curve
+        
+var bottomLeftCurveStartX = centerX;
+        
+		var bottomLeftCurveEndX = centerX - radius;
+		var bottomLeftCurveEndY = centerY;
+        
+		ctx.bezierCurveTo(bottomLeftCurveStartX - handleLength, bottomLeftCurveStartY,
+                        bottomLeftCurveEndX, bottomLeftCurveEndY + handleLength,
+                        bottomLeftCurveEndX, bottomLeftCurveEndY);
+
+		ctx.moveTo(centerX, balloonBottomY);
+		ctx.lineTo(centerX + 5, balloonBottomY + 10);
+		ctx.lineTo(centerX + -5, balloonBottomY + 10);
+		ctx.lineTo(centerX, balloonBottomY);
+
+		ctx.fillStyle = balloons[i].color;
+        ctx.fill();
+        ctx.stroke();
+        ctx.restore();
+				}
+				
+			}());
+
+			function random(lower, upper) {
+				return lower + Math.round(Math.random() * (upper - lower));
+			}
+
+			function balloon() {
+				return {color:'rgba(' + (Math.round(Math.random() * 255)) + ', '+(Math.round(Math.random() * 255))+', '+ (Math.round(Math.random() * 255)) +', 0.8)', size:random(50, 100), position:{x:random(0, WIDTH), y:(HEIGHT + random(40, HEIGHT))}, angle:{value:0, sign:1}, speed:random(7, 15)/10};
+			}
+
+
+		}());
+	</script>
+</body>
+</html>

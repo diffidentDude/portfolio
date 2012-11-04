@@ -1,0 +1,309 @@
+/*Reset CSS*/
+body, div, dl, dt, dd, ul, ol, li, pre, form, fieldset, input, textarea, p, blockquote, th, td {
+    margin: 0;
+    padding: 0;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+fieldset, img {
+    border: 0;
+}
+
+address, caption, cite, code, dfn, em, strong, th, var {
+    font-style: normal;
+    font-weight: normal;
+}
+
+ol, ul {
+    list-style: none;
+}
+
+caption, th {
+    text-align: left;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-size: 100%;
+    font-weight: normal;
+    margin: 0;
+    padding: 0;
+}
+
+q:before, q:after {
+    content: '';
+}
+
+abbr, acronym {
+    border: 0;
+}
+
+* {
+    -webkit-box-sizing: border-box;
+    -o-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+}
+
+html {
+    font-family: "Helvetica Light", "Helvetica", "sans-serif", sans-serif;
+    font-weight: 200;
+    color: #FFF;
+}
+
+html, body {
+    background-color: #000;
+}
+
+.content {
+    border-radius: 5px;
+    background-color: #DDD;
+    height: 749px;
+}
+
+.forty {
+    width: 40%;
+}
+
+.sixty {
+    width: 60%;
+}
+
+.half {
+    width: 50%;
+}
+
+.rightColumn {
+    float: right;
+    height: 680px;
+    overflow: auto;
+}
+
+.leftColumn {
+    float: left;
+    border-right: 1px solid #000;
+    height: 682px;
+    overflow: hidden;
+}
+
+.leftColumn .body h1 {
+    font-size: 2.5em;
+    text-align: left;
+    font-weight: 200;
+    color:#4D4D4D;
+}
+
+.leftColumn .white-box {
+    overflow: auto;
+    box-shadow: inset -1px 3px 5px rgba(0, 0, 0, 0.5);
+    margin:0;
+    border-radius:0;
+    padding: 15px 30px;
+    border: none;
+    height:682px;
+}
+
+.leftColumn .white-box p {
+    margin: 15px 0 0 0;
+    padding-bottom:10px;
+    border-bottom: 2px dotted #DDDDDD;
+    text-align: center;
+}
+
+.leftColumn .white-box p:last-child {
+    border-bottom: none;
+}
+
+.leftColumn.reflection-horizontal {
+    border-left: none;
+}
+
+.reflection-horizontal {
+    border-right: 1px solid rgba(0, 0, 0, 0.4);
+    border-left: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.reflection-vertical {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.4);
+}
+
+.clear {
+    overflow-y: hidden;
+}
+
+.verticalStripes {
+    background-image: -moz-linear-gradient(left, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.1) 50%, rgba(255, 255, 255, 0) 51%, rgba(255, 255, 255, 0) 100%);
+    background-image: -webkit-gradient(linear, left top, right top, color-stop(0%, rgba(255, 255, 255, 0.1)), color-stop(50%, rgba(255, 255, 255, 0.1)), color-stop(51%, rgba(255, 255, 255, 0)), color-stop(100%, rgba(255, 255, 255, 0)));
+    background-image: -webkit-linear-gradient(left, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.1) 50%, rgba(255, 255, 255, 0) 51%, rgba(255, 255, 255, 0) 100%);
+    background-image: -o-linear-gradient(left, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.1) 50%, rgba(255, 255, 255, 0) 51%, rgba(255, 255, 255, 0) 100%);
+    background-image: -ms-linear-gradient(left, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.1) 50%, rgba(255, 255, 255, 0) 51%, rgba(255, 255, 255, 0) 100%);
+    background-image: linear-gradient(left, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.1) 50%, rgba(255, 255, 255, 0) 51%, rgba(255, 255, 255, 0) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr = '#1affffff', endColorstr = '#00ffffff', GradientType = 1);
+    background-size: 8px 100%;
+}
+
+.body h1 {
+    color: #000;
+    text-shadow: 0px 1px 0 rgba(255, 255, 255, 0.8);
+    font-weight: bold;
+    font-size: 1.5em;
+    text-align: center;
+}
+
+.body {
+    overflow-y: auto;
+}
+
+.body > div {
+    margin: 20px 40px;
+}
+
+.header {
+    height: 67px;
+}
+
+.gradientBar {
+    position: relative;
+    background: -moz-linear-gradient(top, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.3) 1%, rgba(255, 255, 255, 0.1) 50%, rgba(10, 14, 10, 0) 51%, rgba(10, 8, 9, 0) 99%, rgba(10, 8, 9, 0.4) 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(255, 255, 255, 0.4)), color-stop(1%, rgba(255, 255, 255, 0.3)), color-stop(50%, rgba(255, 255, 255, 0.1)), color-stop(51%, rgba(10, 14, 10, 0)), color-stop(99%, rgba(10, 8, 9, 0)), color-stop(100%, rgba(10, 8, 9, 0.4)));
+    background: -webkit-linear-gradient(top, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.3) 1%, rgba(255, 255, 255, 0.1) 50%, rgba(10, 14, 10, 0) 51%, rgba(10, 8, 9, 0) 99%, rgba(10, 8, 9, 0.4) 100%);
+    background: -o-linear-gradient(top, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.3) 1%, rgba(255, 255, 255, 0.1) 50%, rgba(10, 14, 10, 0) 51%, rgba(10, 8, 9, 0) 99%, rgba(10, 8, 9, 0.4) 100%);
+    background: -ms-linear-gradient(top, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.3) 1%, rgba(255, 255, 255, 0.1) 50%, rgba(10, 14, 10, 0) 51%, rgba(10, 8, 9, 0) 99%, rgba(10, 8, 9, 0.4) 100%);
+    background: linear-gradient(top, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.3) 1%, rgba(255, 255, 255, 0.1) 50%, rgba(10, 14, 10, 0) 51%, rgba(10, 8, 9, 0) 99%, rgba(10, 8, 9, 0.4) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr = '#66ffffff', endColorstr = '#660a0809', GradientType = 0);
+    -moz-background-clip: padding; /* Firefox 3.6 */
+    -webkit-background-clip: padding; /* Safari 4? Chrome 6? */
+    background-clip: padding; /* Firefox 4, Safari 5, Opera 10, IE 9 */
+    border-bottom: 1px solid #000;
+}
+
+.gradientBar:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 1px;
+    background-color: rgba(240, 240, 240, 0.4);
+}
+
+.gradientBar h1 {
+    text-shadow: 0px -1px 0 rgba(0, 0, 0, 0.6);
+    margin: 0;
+    text-align: center;
+    color: #FFF;
+    font-weight: bold;
+    padding: 14px 0;
+    font-size: 2.0em;
+}
+
+.white-box {
+    margin-top: 20px;
+    border: 1px solid #999;
+    background-color: #FFF;
+    border-radius: 10px;
+}
+
+.white-box p {
+    color: #000;
+    margin: 15px 30px;
+    font-weight: normal;
+    overflow-y: auto;
+}
+
+.contact-header {
+    display: table;
+}
+
+.contact-header span {
+    display: table-cell;
+    vertical-align: middle;
+    color: #000;
+    text-shadow: 0px 1px 0 rgba(255, 255, 255, 0.8);
+    font-weight: bold;
+    text-align: center;
+}
+
+.contact-image {
+    display: table-cell;
+    height: 100px;
+    width: 100px;
+    float: left;
+    border: 1px solid #000;
+    padding: 5px;
+    background-color: #FFF;
+    margin: 0 40px;
+}
+
+.nate .image {
+    background-image: url('avatar2.jpg');
+    height: 100%;
+    width: 100%;
+    background-size: 100%;
+}
+
+.address {
+    overflow-y: auto;
+    width: 85%;
+    float: left;
+}
+
+.white-box ul {
+    list-style: none;
+}
+
+.white-box br {
+    margin-bottom:10px;
+}
+
+.white-box ul li {
+    padding: 15px 30px;
+    color: #000;
+    border-bottom: 1px solid #999;
+    overflow-y: auto;
+}
+
+.white-box ul li:last-child {
+    border-bottom: none;
+}
+
+.white-box ul li span {
+}
+
+.white-box span.label {
+    width: 15%;
+    float: left;
+    color: rgb(83, 95, 143);
+    font-weight: bold;
+    text-align: right;
+}
+
+.white-box span.value {
+    text-align: left;
+    float: left;
+    width: 85%;
+    font-weight: bold;
+    color: #000;
+    padding-left: 40px;
+}
+
+.white-box span.value a {
+    font-weight: bold;
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.white-box span.value a:hover {
+    text-decoration: underline;
+}

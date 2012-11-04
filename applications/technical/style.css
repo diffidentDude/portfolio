@@ -1,0 +1,312 @@
+/*Reset CSS*/
+body, div, dl, dt, dd, ul, ol, li, pre, form, fieldset, input, textarea, p, blockquote, th, td {
+    margin: 0;
+    padding: 0;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+fieldset, img {
+    border: 0;
+}
+
+address, caption, cite, code, dfn, em, strong, th, var {
+    font-style: normal;
+    font-weight: normal;
+}
+
+ol, ul {
+    list-style: none;
+}
+
+caption, th {
+    text-align: left;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-size: 100%;
+    font-weight: normal;
+    margin: 0;
+    padding: 0;
+}
+
+q:before, q:after {
+    content: '';
+}
+
+abbr, acronym {
+    border: 0;
+}
+
+* {
+    font-family: "Helvetica Light", "Helvetica", "sans-serif", sans-serif;
+    font-weight: 200;
+    -webkit-box-sizing: border-box;
+    -o-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
+body {
+}
+
+h1 {
+    font-size: 4em;
+}
+
+h2 {
+    font-size: 3em;
+}
+
+h3 {
+    font-size: 2.25em;
+}
+
+h4 {
+    font-size: 1.75em;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-color: #000;
+    color: #FFF;
+}
+
+h1.title {
+    overflow: hidden;
+    padding: 20px;
+    text-align: center;
+    color: #333333;
+}
+
+.languages {
+    text-align: center;
+    position: relative;
+    height:100%;
+    width:80%;
+}
+
+.menu {
+    width: 20%;
+}
+
+.sub-group {
+    padding: 40px;
+    -webkit-perspective-origin: 50% 50%;
+    -moz-perspective-origin: 50% 50%;
+    -ms-perspective-origin: 50% 50%;
+    -o-perspective-origin: 50% 50%;
+    perspective-origin: 50% 50%;
+    -webkit-transform-style: preserve-3d;
+    -moz-transform-style: preserve-3d;
+    -ms-transform-style: preserve-3d;
+    -o-transform-style: preserve-3d;
+    transform-style: preserve-3d;
+    -webkit-backface-visibility: hidden;
+    -moz-backface-visibility: hidden;
+    -ms-backface-visibility: hidden;
+    -o-backface-visibility: hidden;
+    backface-visibility: hidden;
+    -webkit-transform: perspective(300px) rotateY(90deg);
+    -moz-transform:  perspective(300px) rotateY(90deg);
+    -ms-transform: perspective(300px) rotateY(90deg);
+    -o-transform: perspective(300px) rotateY(90deg);
+    transform: perspective(300px) rotateY(90deg);
+    -webkit-transition: -webkit-transform 0.5s;
+    -moz-transition: -moz-transform 0.5s;
+    -ms-transition: -ms-transform 0.5s;
+    -o-transition: -o-transform 0.5s;
+    transition: transform 0.5s;
+    -webkit-transform-origin: left center;
+    -moz-transform-origin: left center;
+    -ms-transform-origin: left center;
+    -o-transform-origin: left center;
+    transform-origin: left center;
+    position: absolute;
+    top:0;
+    left:0;
+    width:100%;
+}
+
+.sub-group.selected {
+    -webkit-transform: perspective(300px) rotateY(0deg);
+    -moz-transform: perspective(300px) rotateY(0deg);
+    -ms-transform: perspective(300px) rotateY(0deg);
+    -o-transform: perspective(300px) rotateY(0deg);
+    transform: perspective(300px) rotateY(0deg);
+}
+
+.sub-group h1 {
+    text-align: left;
+    font-size: 6em;
+}
+
+.sub-group > div {
+}
+
+.sub-group .progress {
+    padding-bottom: 0;
+    padding-top: 0;
+}
+
+.experience .subtitle {
+    padding: 0;
+}
+
+.experience {
+    padding-right: 80px;
+}
+
+.start h2, .experience h2 {
+    font-size: 6em;
+}
+
+.experience h2 {
+    display: table-cell;
+}
+
+.start h2 {
+    text-align: right;
+}
+
+.experience h2 .measure, .start h2 .measure {
+    vertical-align: text-top;
+    font-size: 0.5em;
+}
+
+.meter {
+    height: 100px;
+    position: relative;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    border: 1px solid #ffffff;
+    background-color: #CCC;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5), inset 0 0px 4px rgba(255, 255, 255, 0.5);
+}
+
+.meter span:first-child {
+    display: block;
+    height: 100%;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    position: relative;
+    overflow: hidden;
+}
+
+.meter span:last-child {
+    position: absolute;
+    top: -15px;
+    left: 0;
+    height: 100%;
+    display: block;
+    font-size: 7em;
+    font-weight: bold;
+    color: white;
+}
+
+.left {
+    float: left;
+}
+
+.right {
+    float: right;
+}
+
+.clear {
+    overflow: hidden;
+}
+
+.subtitle {
+    text-align: right;
+    padding-top: 5px;
+}
+
+.list-item {
+    overflow: hidden;
+    margin-bottom:10px;
+    cursor:pointer;
+
+    -webkit-perspective-origin: 50% 50%;
+    -webkit-transform-style: preserve-3d;
+    -webkit-backface-visibility: hidden;
+    -webkit-transform: perspective(300px) rotateY(0deg);
+    -webkit-transition: -webkit-transform 0.5s;
+    -webkit-transform-origin: right center;
+
+    -moz-perspective-origin: 50% 50%;
+    -moz-transform-style: preserve-3d;
+    -moz-backface-visibility: hidden;
+    -moz-transform: perspective(300px) rotateY(0deg);
+    -moz-transition: -moz-transform 0.5s;
+    -moz-transform-origin: right center;
+
+    -ms-perspective-origin: 50% 50%;
+    -ms-transform-style: preserve-3d;
+    -ms-backface-visibility: hidden;
+    -ms-transform: perspective(300px) rotateY(0deg);
+    -ms-transition: -ms-transform 0.5s;
+    -ms-transform-origin: right center;
+
+    -o-perspective-origin: 50% 50%;
+    -o-transform-style: preserve-3d;
+    -o-backface-visibility: hidden;
+    -o-transform: perspective(300px) rotateY(0deg);
+    -o-transition: -o-transform 0.5s;
+    -o-transform-origin: right center;
+
+    perspective-origin: 50% 50%;
+    transform-style: preserve-3d;
+    backface-visibility: hidden;
+    transform: perspective(300px) rotateY(0deg);
+    transition: transform 0.5s;
+    transform-origin: right center;
+}
+
+li.list-item.selected {
+    -webkit-transform: perspective(300px) rotateY(-90deg);
+    -webkit-transition: -webkit-transform 0.5s;
+    -webkit-transform-origin: right center;
+
+    -moz-transform: perspective(300px) rotateY(-90deg);
+    -moz-transition: -moz-transform 0.5s;
+    -moz-transform-origin: right center;
+
+    -ms-transform: perspective(300px) rotateY(-90deg);
+    -ms-transition: -ms-transform 0.5s;
+    -ms-transform-origin: right center;
+
+    -o-transform: perspective(300px) rotateY(-90deg);
+    -o-transition: -o-transform 0.5s;
+    -o-transform-origin: right center;
+
+    transform: perspective(300px) rotateY(-90deg);
+    transition: transform 0.5s;
+    transform-origin: right center;
+}
+
+li.list-item.selected:hover {
+    cursor:default;
+}
+
+.list-item:hover {
+    -webkit-transform: scale(0.97);
+    -moz-transform: scale(0.97);
+    -ms-transform: scale(0.97);
+    -o-transform: scale(0.97);
+    transform: scale(0.97);
+}
+
+.list-item p {
+    margin: 20px;
+    font-weight: bold;
+    font-size: 25px;
+}
+

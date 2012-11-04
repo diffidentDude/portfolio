@@ -1,0 +1,115 @@
+<html>
+<head>
+	<script src="web/jquery.js"></script>
+	<script src="model/body.js"></script>
+	<script src="model/universe.js"></script>
+	<script src="controller/controller.js"></script>
+	<script>
+	/**
+	 * There will be view objects eventually. As all of this is temporary I'll KISS for now
+	 */
+	var controller = new Controller();
+	
+	$(document).ready(function() {
+		$('body').bind('renderUniverse', function(event, bodies) {
+			$("body").css("background-color", "black");
+			for (var name in bodies) {
+				$("body").append('<div id="' + bodies[name].bodyName + '"></div>');
+				$("#" + bodies[name].bodyName).css({
+					"position": "absolute",
+					"height": (bodies[name].radius * 2),
+					"width": (bodies[name].radius * 2),
+					"top": (bodies[name].position.y - bodies[name].radius),
+					"left": (bodies[name].position.x - bodies[name].radius),
+					"border-radius": bodies[name].radius
+				}).addClass(bodies[name].type);
+			}
+		});
+		
+		$('#timeControls-slow').click(function () {
+			controller.speedDownTime();
+		});
+		
+		$('#timeControls-fast').click(function () {
+			controller.speedUpTime();
+		});
+		
+		$('#launch').bind('click', function () {
+			controller.launch({x: (parseFloat($('#xVelocity').val()) || 0), 
+				y: (parseFloat($('#yVelocity').val()) || 0)});
+		});
+
+        $('#refresh').bind('click', function() {
+            window.location.reload();
+            window.location.href = window.location.href;
+        });
+		
+		$('#preview').bind('click', function () {
+			controller.drawPath(2000, {x: (parseFloat($('#xVelocity').val()) || 0), 
+				y: (parseFloat($('#yVelocity').val()) || 0)});	
+		});
+		
+		$('body').bind('bodyMove', function(event, body) {
+			$('#' + body.bodyName).css({
+				"top": (body.position.y - body.radius),
+				"left": (body.position.x - body.radius)
+			});	
+		});
+		
+		$('body').bind('drawPath', function(event, positions) {
+			var div;
+			for (var i in positions) {
+				div = document.createElement('div');
+				$(div).addClass('path').css({
+					'top':positions[i].y, 
+					'left':positions[i].x, 
+					'width': 1, 
+					'height': 1, 
+					'background-color': '#fff000', 
+					'position': 'absolute'
+				});
+				$('body').append(div);
+			}
+		});
+		
+		controller.testSetupAndStart();
+	});
+	</script>
+	<style>
+		.player{
+			background-color: #fff000;
+			z-index:2;
+		}
+		.planet{
+			background-color: #ff0000;
+			z-index:1;
+		}
+		
+		p, a {
+			color: #ffffff;
+			font-size: 50px;
+		}
+		
+		a {
+			font-size: 50px;
+			font-weight:bold;
+			cursor:pointer;
+		}
+	</style>
+</head>
+
+
+<body>
+	<div id="timeControls">
+		<a id="timeControls-slow"><</a>
+		<a id="timeControls-fast">></a>
+	</div>
+	<div id="gameControls">
+		<input type="text" id="xVelocity" />
+		<input type="text" id="yVelocity" value="8"/>
+		<button type="button" id="launch" >Go</button>
+		<button type="button" id="preview" >Preview</button>
+        <button type="button" id="refresh">Refresh</button>
+	</div>
+</body>
+</html>

@@ -1,0 +1,85 @@
+<!doctype html>
+<!--[if lt IE 7]>
+<html class="no-js ie6 oldie" lang="en"> <![endif]-->
+<!--[if IE 7]>
+<html class="no-js ie7 oldie" lang="en"> <![endif]-->
+<!--[if IE 8]>
+<html class="no-js ie8 oldie" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+    <title></title>
+    <meta name="description" content="cover letter">
+    <meta name="author" content="Nate">
+
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+
+    <!-- CSS concatenated and minified via ant build script-->
+    <link rel="stylesheet" href="core/style.css">
+    <script src="core/jQuery-min.js"></script>
+    <!-- end CSS-->
+</head>
+
+<body>
+<div id="bezel">
+    <svg id="reflection" xmlns="http://www.w3.org/2000/svg"
+         xmlns:xlink="http://www.w3.org/1999/xlink">
+        <defs>
+            <linearGradient id="slidingWhite"
+                            x1="0%" y1="0%"
+                            x2="0%" y2="0%"
+                            spreadMethod="pad">
+                <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.4"/>
+                <stop offset="50%" stop-color="#FFFFFF" stop-opacity="1"/>
+                <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0.4"/>
+                <animate attributeName="x1" attributeType="XML"
+                     from="0%" to="150%"
+                     begin="0s" dur="2s" fill="freeze" repeatCount="indefinite"/>
+                <animate attributeName="x2" attributeType="XML"
+                     from="-50%" to="100%"
+                     begin="0s" dur="2s" fill="freeze" repeatCount="indefinite"/>
+            </linearGradient>
+            <linearGradient id="dockHighlight" x1="0%" y1="0%" x2="100%" y2="0%" spreadMethod="pad">
+                <stop offset="0%" stop-color="rgb(111,111,121)" stop-opacity="0.6"/>
+                <stop offset="25%" stop-color="rgb(200,200,210)" stop-opacity="0.6"/>
+                <stop offset="50%" stop-color="rgb(220,220,230)" stop-opacity="0.6"/>
+                <stop offset="70%" stop-color="rgb(220,220,230)" stop-opacity="0.6"/>
+                <stop offset="80%" stop-color="rgb(180,180,190)" stop-opacity="0.6"/>
+                <stop offset="100%" stop-color="rgb(111,111,121)" stop-opacity="0.7"/>
+            </linearGradient>
+
+            <linearGradient id="iconReflectionGradient" x1="0%" y1="0%" x2="0%" y2="100%" spreadMethod="pad">
+                <stop offset="0%" stop-color="#FFFFFF" stop-opacity="1"/>
+                <stop offset="50%" stop-color="#FFFFFF" stop-opacity="0.4"/>
+                <stop offset="99%" stop-color="#FFFFFF" stop-opacity="0.3"/>
+                <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0.2"/>
+            </linearGradient>
+
+            <linearGradient id="reflectionGradient"
+                            x1="0%" y1="0%"
+                            x2="0%" y2="100%"
+                            spreadMethod="pad">
+                <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.15"/>
+                <stop offset="30%" stop-color="#FFFFFF" stop-opacity="0.1"/>
+                <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/>
+            </linearGradient>
+        </defs>
+        <polygon points="600,0  950,950  1206,950 1206,0" style="fill:url(#reflectionGradient);"/>
+    </svg>
+    <div id="lockButton">
+    </div>
+    <div class="inlineContainer">
+        <div id="screen">
+        </div>
+    </div>
+    <div class="homeButton">
+        <button id="homeButton">
+        </button>
+    </div>
+</div>
+<script src="core/iPad.js"></script>
+</body>
+</html>

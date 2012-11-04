@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<!-- saved from url=(0035)http://js1k.com/2012-love/shim.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<title>JS1k, 1k demo submission [ID]</title>
+		<meta charset="utf-8">
+		</head>
+	<body>
+<style>
+* {
+    box-sizing:border-box;   
+}
+
+body, html {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+}
+
+#codearea {
+	font-family:"Comic Sans MS", sans-serif;
+	font-size: 0.9em;
+    width: 100%;
+    height: 100%;
+    padding-top:4px;
+    background-color: #fff;
+    background-image:-webkit-linear-gradient(0deg, transparent 79px, #ABCED4 79px, #ABCED4 81px, transparent 81px), -webkit-linear-gradient(#EEE .1em, transparent .1em);
+    background-image: -moz-linear-gradient(0deg, transparent 79px, #ABCED4 79px, #ABCED4 81px, transparent 81px), -moz-linear-gradient(#EEE .1em, transparent .1em);
+    background-image: -ms-linear-gradient(90deg, transparent 79px, #abced4 79px, #abced4 81px, transparent 81px),-ms-linear-gradient(#eee .1em, transparent .1em);
+    background-image: -o-linear-gradient(90deg, transparent 79px, #abced4 79px, #abced4 81px, transparent 81px),-o-linear-gradient(#eee .1em, transparent .1em);
+    background-image: linear-gradient(90deg, transparent 79px, #abced4 79px, #abced4 81px, transparent 81px),linear-gradient(#eee .1em, transparent .1em);
+    background-size: 100% 19px;
+}
+
+#codearea ol {
+    list-style: none;
+    padding: 0;
+	margin: 0;
+}
+
+#codearea ol li {
+    padding: 0 90px;
+}
+
+#cursor {
+	background-color: black;
+	width: 1px;
+	height: 14px;
+	display: inline-block;
+	-webkit-animation-name:blink;
+	-webkit-animation-duration:1s;
+	-webkit-animation-iteration-count: infinite;
+	-webkit-animation-timing-function: cubic-bezier(0.0, 0.0, 1.0, 1.0);
+	position: relative;
+	top: 2px;
+	margin-right:-1px;
+}
+
+@-webkit-keyframes blink {
+	from {
+		opacity:1;
+	}
+	to {
+		opacity:0;
+	}
+}
+
+
+</style>
+<script>
+var t = document.createElement('div'),
+    b = document.getElementsByTagName('body')[0],
+	s, 
+	cursor, 
+	ol, 
+	li, 
+	lineIndex = 0, 
+	wordIndex = -1, 
+	indention = 0;
+	words = [], 
+	special = /[\(\)\{\}\[\]\?\.\,\'\"\!\/\\\*\%\^\+\=\&\-\$\#\@\;\:]/, 
+	regex = {
+		getClass: function (letter) {
+			for(var i in this) {
+				if (this[i].regex && this[i].regex.test(letter)) {
+					return regex[i].className;
+				}
+			}
+			return "";
+		}, 
+		bracket: {
+			className:"bracket", 
+			regex:/[\(\)]/},
+		squareBracket: {
+			className:"squareBracket", 
+			regex:/[\[\]]/},
+		curlyBrace: {
+			className:"curlyBrace", 
+			regex:/[\{\}]/}, 
+		punctuation: {
+			className:"punctuation", 
+			regex:/[\?\.\,\'\"\!\/]/}, 
+		maths: {
+			className:"maths", 
+			regex:/[\\\*\%\^\+\=\&\-]/}, 
+		symbol: {
+			className:"symbol", 
+			regex:/[\$\#\@]/}, 
+		colon: {
+			className:"colon", 
+			regex:/[\;\:]/}, 
+		aVar: {
+			className:"aVar", 
+			regex:/^var$/}, 
+		aFunction: {
+			className:"aFunction", 
+			regex:/^function$/}
+	};
+t.id = 'codearea';
+t = b.appendChild(t);
+ol = document.createElement('ol');
+t.appendChild(ol);
+ol.addLine = addLine;
+li = ol.addLine(li, 'li', 'line-' + lineIndex++);
+cursor = createCursor();
+t.onclick = handleEntry;
+
+function handleEntry() {
+	this.onblur = function () {
+		this.onclick = handleEntry;
+	};
+	this.onclick = function() {
+		moveCursor(ol.lastChild, cursor);
+	};
+	this.tabIndex = "0";
+	this.focus();
+	moveCursor(li, cursor);
+	this.onkeydown = function(e) {
+		if (e.keyCode === 8) {
+			e.preventDefault();
+			// Delete last entered span if line is empty, remove it.
+			if (cursor.previousSibling !== null) {
+				s = deleteNode(cursor.previousSibling);
+			} else {
+				li = deleteLine(cursor.parentElement);
+			}
+		} else if (e.keyCode === 9) {
+			// handle tab
+			e.preventDefault();
+			indention++;
+			s = addNode(this, 'span');
+			s.innerHTML = '&nbsp;&nbsp;&nbsp;&nbsp;';
+			s.setAttribute('class', "tab");
+		} else if (e.keyCode === 39) { // >
+			if (cursor.nextSibling && cursor.nextSibling.nextSibling) {
+				moveCursor(cursor.nextSibling.nextSibling, cursor);
+			} else if (cursor.nextSibling) {
+				// Move to the end of current line
+				moveCursor(cursor.parentElement, cursor);
+			} else if (cursor.parentElement.nextSibling) {
+				// Move to the start of the next line, if one exists
+				moveCursor(cursor.parentElement.nextSibling.firstChild, cursor);
+			}
+		} else if (e.keyCode === 37) { // <
+			if (cursor.previousSibling) {
+				// Move left if one space exists
+				moveCursor(cursor.previousSibling, cursor); 
+			} else if (cursor.parentElement.previousSibling) {
+				// If the start of the current line, move to end of previous line if one exists
+				moveCursor(cursor.parentElement.previousSibling, cursor);
+			}
+		} else if (e.keyCode === 38 && cursor.parentElement.previousSibling) { // ^
+			moveCursor(getCursorIndex(cursor.parentElement.children, cursor) >= cursor.parentElement.previousSibling.children.length? cursor.parentElement.previousSibling: cursor.parentElement.previousSibling.children[getCursorIndex(cursor.parentElement.children, cursor)], cursor);
+			e.preventDefault();
+		} else if (e.keyCode === 40 && cursor.parentElement.nextSibling) { // v
+			moveCursor(getCursorIndex(cursor.parentElement.children, cursor) >= cursor.parentElement.nextSibling.children.length? cursor.parentElement.nextSibling: cursor.parentElement.nextSibling.children[getCursorIndex(cursor.parentElement.children, cursor)], cursor);
+			e.preventDefault();
+		}
+	};
+	this.onkeypress = function(e) {
+		var letter = String.fromCharCode(e.keyCode);
+		if (e.keyCode === 13) {
+			var cursorIndex = -1, children = cursor.parentElement.children;
+			// if current line is empty, insert a space before continuing
+            li = ol.addLine(cursor.parentElement, 'li', 'line-' + lineIndex++);
+			if (cursor.parentElement.innerHTML === '<span id="cursor"></span>') {
+				s = addNode(this, 'span');
+				s.innerHTML += '&nbsp;';
+				s.setAttribute('class', "white-space");
+			} else {
+				// if current line is not empty, transfer contents to beginning of next line.
+				cursorIndex = getCursorIndex(children, cursor)
+			}
+			cursorIndex === -1? moveCursor(li, cursor): li.addAll(children, cursorIndex);
+		} else if (e.keyCode === 32) {
+			s = addNode(this, 'span');
+			s.innerHTML += '&nbsp;';
+			s.setAttribute('class', "space");
+		} else if (special.test(letter)) {
+			s = addNode(this, 'span');
+			s.innerHTML += letter;
+			s.setAttribute('class', regex.getClass(letter));
+		} else if (!s || s.innerHTML === '&nbsp;' || s.nodeName !== 'SPAN') {
+			// New or first word
+			wordIndex++;
+			s = addNode(this, 'span');
+			s.innerHTML += letter;
+			words[wordIndex] = letter;
+			s.setAttribute('class', "word-" + wordIndex);
+		} else {
+			// Add to the current word/span
+			s = addNode(this, 'span');
+			s.innerHTML += letter;
+			words[wordIndex] += letter;
+			s.setAttribute('class', "word-" + wordIndex);
+		}
+	}
+}
+
+function searchAllInstancesOfWord(word) {
+	var indices = [], idx = words.indexOf(word);  
+	while (idx != -1) {  
+    	indices.push(idx);  
+    	idx = words.indexOf(word, idx + 1);  
+	}  
+	return indices;
+}
+
+function deleteLine(li) {
+	var previous = li.previousSibling;
+	if (previous) {
+		if (previous.innerHTML === '<span class="white-space">&nbsp;</span>') {
+			previous.innerHTML = '';
+		}
+		moveCursor(previous, cursor);
+		if (li.innerHTML !== '') {
+			// Move current line content to upper line behind the cursor.
+			previous.addAll(li.children);
+		}
+		li.parentNode.removeChild(li);
+		return previous;
+	} else {
+		return li;
+	}
+}
+
+function deleteNode(s) {
+	var previous = s.previousSibling;
+	s.parentNode.removeChild(s);
+	return previous;
+}
+
+function addNode(thiz, nodeName, id) {
+	var s = document.createElement(nodeName);
+	id? s.id = id: null;
+	cursor.parentNode.insertBefore(s, cursor);
+	s.onclick = function(e) {
+		e.currentTarget.offsetLeft +  e.currentTarget.offsetWidth/2 < e.pageX? moveCursor(e.currentTarget.nextSibling, cursor):	moveCursor(e.currentTarget, cursor);
+		e.cancelBubble = true;
+	};
+	return s;
+}
+
+function addLine(current, nodeName, id) {
+	var li = document.createElement(nodeName);
+	id? li.id = id: null;
+	if (current && current.nextSibling) {
+		this.insertBefore(li, current.nextSibling);
+	} else {
+		this.appendChild(li);
+	}
+	li.onclick = function(e) {
+		moveCursor(e.currentTarget, cursor);
+		e.cancelBubble = true;
+	};
+	li.addAll = addAll;
+	return li;
+}
+
+function createCursor() {
+	var cursor = document.createElement('span');
+	cursor.id = 'cursor';
+	return cursor;
+}
+
+function moveCursor(thiz, cursor) {
+	if (cursor.parentNode && cursor.parentNode.innerHTML === '<span id="cursor"></span>') {
+			cursor.parentNode.innerHTML = '<span class="white-space">&nbsp;</span>';
+	}
+	if (thiz.nodeName === 'SPAN') {
+		thiz.parentNode.insertBefore(cursor, thiz);
+		if (thiz.className === 'white-space') {
+			deleteNode(thiz);
+		}
+		s = thiz;
+	} else {
+		if (thiz.innerHTML === '<span class="white-space">&nbsp;</span>') {
+			thiz.innerHTML = '';
+		}
+		thiz.appendChild(cursor);
+		li = thiz;
+	}
+}
+
+function addAll(elements, cursorIndex) {
+	if (cursorIndex) {
+		for (var i = elements.length - 1; i >= cursorIndex; i--) {
+			this.insertBefore(elements[i], this.childNodes[0]);
+		}
+	} else {
+		while (elements.length) {
+			this.appendChild(elements[0]);
+		}
+	}
+}
+
+function getCursorIndex(children, cursor) {
+	var returnable, i = -1;
+	for (i; i < children.length; i++) {
+		if (children[i] === cursor) {
+			return i;
+		}
+	}
+	return i;
+}
+// end of submission //
+		</script>
+	
+
+</body></html>

@@ -1,0 +1,70 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    font-family: "Helvetica Light", "Helvetica", "sans-serif", sans-serif;
+    font-weight: 200;
+    -webkit-box-sizing: border-box;
+    -o-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    background-color: #333;
+}
+
+.title {
+    color:#ccc;
+    font-size: 50px;
+    text-shadow: -1px 0 #000;
+    text-align: center;
+}
+
+#timeline {
+    position: relative;
+    margin-left: 40px;
+    height:550px;
+    margin-top:100px;
+}
+
+.range {
+    position: absolute;
+    top: 0;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    opacity: 0.5;
+    cursor:pointer;
+    border-radius: 2px;
+}
+
+.range a {
+    color:#fff;
+}
+
+.range:hover {
+    z-index:999;
+    opacity: 1;
+    border: 1px solid rgba(255, 255, 255, 1);
+    box-shadow: 0 0 5px rgba(0,0,0,1);
+}
+
+.range h1 {
+    font-size: 18px;
+    margin: 10px;
+    color: #fff;
+}
+
+.range p {
+    margin: 10px;
+    color:#fff;
+}
+
+.timejump {
+    height:100%;
+    width:140px;
+    border-left: 1px dashed #FFF;
+    position:absolute;
+}
+
+.timejump h1 {
+    position: relative;
+    left: -27%;
+    top: -8%;
+    color:#ccc;
+}
