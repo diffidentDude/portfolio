@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<head>
+	<title>nate - RESUME V2.0</title>
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+<body>
+	<div class="resume">
+		<section class="personal">
+			<h1>personal</h1>
+		</section>
+		<section class="technical">
+			<h1>technical</h1>
+		</section>
+		<section class="timeline">
+			<h1>timeline</h1>
+		</section>
+		<section class="reference">
+			<h1>reference</h1>
+		</section>
+	</div>
+	<button class="back"></button>
+	<script>
+		function addClass(name) {
+			this.className = this.className + " " + name;
+		}
+
+		function removeClass(name) {
+			this.classList.remove(name);
+		}
+
+		function delegate(eventName, test, fn) {
+			this.addEventListener(eventName, function(e) {
+				var delegated = walkTo.call(e.target, test);
+				fn.call(delegated, e);
+			});
+		}
+
+		function walkTo(test) {
+			if (test.call(this)) {
+				return this;
+			} else {
+				return this.parentElement && walkTo.call(this.parentElement, test);
+			}
+		}
+
+		document.getElementsByClassName('back')[0].addEventListener('click', function(e) {
+			removeClass.call(this, 'active');
+			removeClass.call(document.getElementsByClassName('resume')[0], 'zoomed');
+			removeClass.call(document.getElementsByClassName('resume')[0], 'personal');
+			removeClass.call(document.getElementsByClassName('resume')[0], 'technical');
+			removeClass.call(document.getElementsByClassName('resume')[0], 'reference');
+			removeClass.call(document.getElementsByClassName('resume')[0], 'timeline');
+			removeClass.call(document.getElementsByClassName('personal')[0], 'active');
+			removeClass.call(document.getElementsByClassName('technical')[0], 'active');
+			removeClass.call(document.getElementsByClassName('reference')[0], 'active');
+			removeClass.call(document.getElementsByClassName('timeline')[0], 'active');
+		});
+
+		delegate.call(document.getElementsByClassName('resume')[0], 
+			'click', 
+			function() {
+				return "section" === this.localName;
+			}, 
+			function(e) {
+				this.style.cssText = '-webkit-transform:rotateY(30deg) rotateX(30deg);';
+				addClass.call(document.getElementsByClassName('back')[0], "active");
+				addClass.call(document.getElementsByClassName('resume')[0], "zoomed " + this.className);
+				addClass.call(this, "active");
+			}
+		);
+
+	</script>
+</body>	
+</html>
