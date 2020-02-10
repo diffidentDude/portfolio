@@ -511,6 +511,20 @@
                 pinned : false,
                 iconPath : 'applications/planetrySwingBy/icon.png'
             },
+            SlingShot2 :  {
+                __proto__: application,
+                src : "applications/planetrySwingBy2/index.html",
+                start : function () {
+
+                },
+                stop : function () {
+
+                },
+                view : window.document.createElement('iframe'),
+                name : 'SlingShot2',
+                pinned : false,
+                iconPath : 'applications/planetrySwingBy2/icon.png'
+            },
             BirthdayCard2 :  {
                 __proto__: application,
                 src : "applications/birthdaycard2/birthday.html",
@@ -524,6 +538,20 @@
                 name : 'BirthdayCard2',
                 pinned : false,
                 iconPath : 'applications/birthdaycard2/icon.png'
+            },
+            Balls :  {
+                __proto__: application,
+                src : "applications/balloons2/index.html",
+                start : function () {
+
+                },
+                stop : function () {
+
+                },
+                view : window.document.createElement('iframe'),
+                name : 'Balls',
+                pinned : false,
+                iconPath : 'applications/balloons2/icon.png'
             }
         },
         start : function () {
