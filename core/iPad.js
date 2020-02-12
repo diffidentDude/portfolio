@@ -247,6 +247,33 @@
                                 thiz.slide();
                             }
                         });
+                        this.slider.addEventListener('touchmove', function(e) {
+                            if (document.querySelector('#slider').classList.contains('active')) {
+                                console.log(e);
+                                var touches = e.changedTouches;
+                                var touch = touches.item(0);
+                                var leftLimit = 2, 
+                                    sliderWidth = $(thiz.slider).width(), 
+                                    buttonWidth = $(thiz.button).width(), 
+                                    rightLimit = sliderWidth - (buttonWidth - leftLimit), 
+                                    position = thiz.getPosition((-buttonWidth / 2 + leftLimit + touch.pageX - $(thiz.slider).offset().left), leftLimit, rightLimit), 
+                                    transparency = Math.round((1 - position * 4 / sliderWidth) * 100) / 100;
+
+                                $(thiz.slider).attr('value', Math.round((position / rightLimit) * 100));
+                                $(thiz.button).css({'left': position + 'px'});
+                                $(thiz.slideToUnlock).css({'opacity': transparency});
+
+                                if ($(thiz.slider).attr('value') === 100) {
+                                    thiz.unlock();
+                                }
+                            }
+                        });
+
+                        this.slider.addEventListener('touchend', function() {
+                            if ($('#slider').hasClass('active')) {
+                                thiz.slide();
+                            }
+                        });
                     },
                     start : function () {
      
@@ -271,7 +298,9 @@
                         this.slider.appendChild(this.button);
                         this.view.appendChild(this.slider);
 
-                        $(this.button).mousedown(function (e) {
+                        $(this.button).bind('mousedown', function (e) {
+                            $('#slider').addClass('active');
+                        }).bind('touchstart', function() {
                             $('#slider').addClass('active');
                         });
 
