@@ -145,8 +145,8 @@ self.onmessage = ({ data }) => {
 
         const balls = [];
 
-        for (let i = 15; i < (data.dimensions.x - 10); i += 30) {
-            for (let j = 15; j < (data.dimensions.y - 10); j += 30) {
+        for (let i = 15; i < (data.dimensions.x - 10); i += 300) {
+            for (let j = 15; j < (data.dimensions.y - 10); j += 300) {
                 const colour = 'rgba(' + (Math.round(Math.random() * 255)) + ', '+(Math.round(Math.random() * 255))+', '+ (Math.round(Math.random() * 255)) +', 1)';
                 const xvel = -5 + (Math.round(Math.random() * 10));
                 const yvel = -5 + (Math.round(Math.random() * 10));

@@ -751,7 +751,7 @@ body {
 div#welcomeMessage {
     z-index:3;
     position: absolute;
-    background-color: rgba(0, 0, 30, 0.4);
+    background-color: rgba(0, 0, 30, 0.6);
     top: 15%;
     width: 50%;
     left: 25%;
@@ -775,6 +775,8 @@ div#welcomeMessage {
     -o-transform: scale(1);
     -ms-transform: scale(1);
     transform: scale(1);
+
+    backdrop-filter: blur(4px);
 }
 
 div#welcomeMessage.hide {
@@ -844,7 +846,6 @@ div#welcomeMessage.hide {
     margin: 0 36%;
     cursor:pointer;
 }
-
 
 /*Screen	You are on a screen*/
 @media screen {

@@ -130,7 +130,7 @@
                     desktop.id = 'desktop';
                     pinnedApps.id = 'pinnedApps';
                     welcomeMessage.id = 'welcomeMessage';
-                    welcomeMessage.className = 'hide';
+                    welcomeMessage.className = 'hide blur';
                     welcomeMessage.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><circle cx="250" cy="-950" r="1000" style="fill:url(#iconReflectionGradient);"/></svg><div><h1>Welcome!</h1><p>This is my resume, also a living breathing example of my work. Feel free to look around, click things and have fun.</p><p>The apps on the dock are those that contain my personal information, references and information about past work an education.</p><p>The other apps are little snippets of things that I have worked on in the past and wanted to share.</p><p>I hope you have a nice time, and I look forward to hearing from you,</p><p>Nate</p><button id="closeWelcome">Close</button></div>';
 
                     for (application in applications) {
@@ -249,7 +249,7 @@
                         });
                         this.slider.addEventListener('touchmove', function(e) {
                             if (document.querySelector('#slider').classList.contains('active')) {
-                                console.log(e);
+                                e.preventDefault();
                                 var touches = e.changedTouches;
                                 var touch = touches.item(0);
                                 var leftLimit = 2, 
