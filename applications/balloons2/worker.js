@@ -10,10 +10,6 @@ class Vector {
 }
 
 class Ball {
-	position = new Vector(0, 0);
-    velocity= new Vector(0, 0);
-    mass = 0.1;
-	radius = 10;
 	constructor(position, velocity, accelaration, mass, radius, colour) {
 		this.A = Math.PI * radius.x * radius.x / 10000;
 		this.position = position;
