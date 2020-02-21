@@ -31,7 +31,7 @@ function vectorFn(fn, v1, v2) {
 }
 
 function singleVectorFn(fn ,v) {
-    return new Vector(fn.x(v.x, v.y));
+    return new Vector(fn.x(v.x), fn.x(v.y));
 }
 
 function multiplyS(x, y) {
@@ -70,8 +70,9 @@ function dot(v1, v2) {
     return v1.x * v2.x + v1.y * v2.y; 
 }
 
-const abs = new Vector((x) => Math.abs(x));
-const sign = new Vector(Math.sign);
+const ceil = new Vector(x => Math.ceil(x * 100) / 100);
+const abs = new Vector(x => Math.abs(x));
+const sign = new Vector(x => Math.sign(x));
 const minus = new Vector(minusS);
 const add = new Vector(addS);
 const multiply = new Vector(multiplyS);
@@ -186,18 +187,21 @@ function objectCollisions(balls) {
 
     const angle2 = theta(dist2);
 
+    const bounciness = new Vector(0.95);
+
     // u1 = v1 - 2*m2 / M * np.dot(v1-v2, r1-r2) / d * (r1 - r2)
-    const u1 = vectorFn(minus, v1, velocity(v1, v2, m2, M, r1, r2, d));
+    const u1 = vectorFn(minus, v1, vectorFn(multiply, bounciness, velocity(v1, v2, m2, M, r1, r2, d)));
     // const u1 = vectorFn(minus, v1, component(hypotenuse(velocity(v1, v2, m2, M, r1, r2, d)), angle2));
 
-
     // u2 = v2 - 2*m1 / M * np.dot(v2-v1, r2-r1) / d * (r2 - r1)
-    const u2 = vectorFn(minus, v2, velocity(v2, v1, m1, M, r2, r1, d));
+    const u2 = vectorFn(minus, v2, vectorFn(multiply, bounciness, velocity(v2, v1, m1, M, r2, r1, d)));
     // const u2 = vectorFn(minus, v2, component(hypotenuse(velocity(v2, v1, m1, M, r2, r1, d)), angle));
 
     const edgeDist2 = Math.abs(hypotenuse(dist2)) - (ball1.radius.x + ball2.radius.x);
 
-    const components = component(-edgeDist2 / 2, angle2);
+    const working = component(-edgeDist2 / 2, angle2);
+    const workingSign = singleVectorFn(sign, working);
+    const components = vectorFn(multiply, workingSign, singleVectorFn(ceil, singleVectorFn(abs, working)));
     const d1 = vectorFn(add, ball1.position, vectorFn(multiply, singleVectorFn(sign, dist), components));
     const d2 = vectorFn(add, ball2.position, vectorFn(multiply, singleVectorFn(sign, dist2), components));
 
@@ -219,6 +223,7 @@ function velocity(v1, v2, m2, M, r1, r2, d) {
 }
 
 function loop(universe, balls) {
+    const start = (new Date()).getTime();
     const { GRAVITY, DENSITY_AIR, BALL_DRAG, POINT_5, dt, ONE_HUNDRED, ZERO, bounciness, dimensions } = universe;
     const updatedBalls = balls.map((ball, index, array) => {
         let calculatedForce = new Vector(0, 0);
@@ -238,37 +243,63 @@ function loop(universe, balls) {
         const avg_ay = vectorFn(multiply, POINT_5, vectorFn(add, new_ay, ball.accelaration));
         const newVelocity = vectorFn(add, ball.velocity, vectorFn(multiply, avg_ay, dt));
 
-        // Collisions
         return new Ball(newPosition, newVelocity, ball.accelaration, ball.mass, ball.radius, ball.colour, ball.id);
     });
 
-    const collidingBalls = [];
+    // const ballPairs = updatedBalls.reduce((accumulator, nextBall) => {
+    //     updatedBalls.forEach((otherBall) => {
+    //         if (!accumulator.find((ballPair) => ballPair.find(nextBall) && ballPair.find(otherBall))) {
+    //             accumulator.push([nextBall, otherBall]);
+    //         }
+    //     });
+    // },[])
+
+    function collisionLoop(updatedBalls) {
+        for(var i = 0; i < updatedBalls.length; i++) {
+            for(var j = 0; j < updatedBalls.length; j++) {
+                var ball1 = updatedBalls[i];
+                var ball2 = updatedBalls[j];
+                if (ball1.id !== ball2.id && cirleOverlaps(ball1, ball2)) {
+                    const [updatedBall1, updatedBall2] = objectCollisions([ball1, ball2]);
+                    updatedBalls[i] = updatedBall1;
+                    updatedBalls[j] = updatedBall2;
+                    i = 0;
+                    j = 0;
+                } 
+            }
+        }
+
+        return updatedBalls;
+    }
+
+    // const collidingBalls = [];
     
-    updatedBalls.forEach((ball1, _, array) => {
-		array.forEach((ball2) => {
-			if (ball1.id !== ball2.id && cirleOverlaps(ball1, ball2)) {
-				const existingCollision = collidingBalls.find((collidingBall) => collidingBall.find((ball) => ball.id === ball1.id) && collidingBall.find((ball) => ball.id === ball2.id));
-				if (existingCollision) {
-					// if (!existingCollision.find((ball) => ball.id === ball1.id)) {
-					// 	existingCollision.push(ball1);
-					// }
-					// if (!existingCollision.find((ball) => ball.id === ball2.id)) {
-					// 	existingCollision.push(ball2);
-					// }
-				} else {
-					collidingBalls.push([ball1, ball2]);
-				}
-			}
-		});
-	});
+    // updatedBalls.forEach((ball1, _, array) => {
+	// 	array.forEach((ball2) => {
+	// 		if (ball1.id !== ball2.id && cirleOverlaps(ball1, ball2)) {
+	// 			const existingCollision = collidingBalls.find((collidingBall) => collidingBall.find((ball) => ball.id === ball1.id) && collidingBall.find((ball) => ball.id === ball2.id));
+	// 			if (existingCollision) {
+	// 				// if (!existingCollision.find((ball) => ball.id === ball1.id)) {
+	// 				// 	existingCollision.push(ball1);
+	// 				// }
+	// 				// if (!existingCollision.find((ball) => ball.id === ball2.id)) {
+	// 				// 	existingCollision.push(ball2);
+	// 				// }
+	// 			} else {
+	// 				collidingBalls.push([ball1, ball2]);
+	// 			}
+	// 		}
+	// 	});
+	// });
 
-    const collidedBalls = collidingBalls.reduce((accumulator, balls) => {
-        return accumulator.concat(objectCollisions(balls));
-    }, []);
+    // const collidedBalls = collidingBalls.reduce((accumulator, balls) => {
+    //     return accumulator.concat(objectCollisions(balls));
+    // }, []);
 
-    const allBalls = updatedBalls.map((ball) => {
-        const collidedBall = collidedBalls.find((collidedBall) => collidedBall.id === ball.id);
-        return wallCollisions(collidedBall? collidedBall: ball, ZERO, dimensions, bounciness);
+    const collidedBalls = collisionLoop(updatedBalls);
+
+    const allBalls = collidedBalls.map((ball) => {
+        return wallCollisions(ball, ZERO, dimensions, bounciness);
     });
 
     const ballsMessage = {
@@ -276,23 +307,29 @@ function loop(universe, balls) {
         balls: allBalls
     };
 
-	self.postMessage(ballsMessage);
-	
-	setTimeout(loop.bind(null, universe, allBalls), dt.x * 1000);
+    const now = (new Date()).getTime();
+    const renderTime = now - start;
+    console.log(`Frame took ${now - start}ms to render`);
+    self.postMessage(ballsMessage);
+    if (renderTime > dt.x * 1000) {
+        setTimeout(loop.bind(null, universe, allBalls), renderTime);
+    } else {
+        setTimeout(loop.bind(null, universe, allBalls), dt.x * 1000);
+    }
 }
 
 self.onmessage = ({ data }) => {
     if (data.type === 'dimensions') {
         const universe = {
             dimensions: new Vector(data.dimensions.x, data.dimensions.y),
-            dt: new Vector(0.02, 0.02),  // Time step.
-            bounciness: new Vector(-0.5, -0.5),   // Coefficient of restitution ("bounciness")
+            dt: new Vector(0.02),  // Time step.
+            bounciness: new Vector(-0.5),   // Coefficient of restitution ("bounciness")
             DENSITY_AIR: 1.2,  // Density of air. Try 1000 for water.
             BALL_DRAG: 0.47, // Coeffecient of drag for a ball
             GRAVITY: new Vector(0, 9.81),
-            ZERO: new Vector(0, 0),
-            POINT_5: new Vector(0.5, 0.5),
-            ONE_HUNDRED: new Vector(100, 100)
+            ZERO: new Vector(0),
+            POINT_5: new Vector(0.5),
+            ONE_HUNDRED: new Vector(100)
         }
 
         let i = 0;

@@ -20,7 +20,7 @@ function draw(ctx, balls) {
 const worker = new Worker('worker.js');
 worker.onmessage = ({ data }) => {
 	if (data.type === 'balls') {
-		requestAnimationFrame(draw.bind(null, ctx, data.balls));
+		draw(ctx, data.balls);
 	}
 };
 
