@@ -205,7 +205,7 @@ function objectCollisions(balls) {
     const d1 = vectorFn(add, ball1.position, vectorFn(multiply, singleVectorFn(sign, dist), components));
     const d2 = vectorFn(add, ball2.position, vectorFn(multiply, singleVectorFn(sign, dist2), components));
 
-    return [Object.assign({}, ball1, { velocity: u1, position: d1 }), Object.assign({}, ball2, { velocity: u2, position: d2 })];
+    return [Object.assign(ball1, { velocity: u1, position: d1 }), Object.assign(ball2, { velocity: u2, position: d2 })];
 }
 
 function velocity(v1, v2, m2, M, r1, r2, d) {
@@ -222,7 +222,71 @@ function velocity(v1, v2, m2, M, r1, r2, d) {
     return TWO_M2_DIVIDE_M_MULT_DOT_PRODUCT_DIVIDE_D_MULT_R;
 }
 
-function loop(universe, balls) {
+function collisionLoop(tester, worker, updatedBalls) {
+    let iterations = 0;
+    for(var i = 0; i < updatedBalls.length; i++) {
+        iterations++;
+        for(var j = 0; j < updatedBalls.length; j++) {
+            var ball1 = updatedBalls[i];
+            var ball2 = updatedBalls[j];
+            iterations++;
+            if (ball1.id !== ball2.id && tester(ball1, ball2)) {
+                const [updatedBall1, updatedBall2] = worker([ball1, ball2]);
+                updatedBalls[i] = updatedBall1;
+                updatedBalls[j] = updatedBall2;
+                i = 0;
+                j = 0;
+            }
+        }
+    }
+    console.log('collisionLoop', iterations);
+    return updatedBalls;
+}
+
+function collisionLoop2(tester, worker, updatedBalls) {
+    let iterations = 0;
+    for(let i = 0; i < updatedBalls.length; i++) {
+        let ball1 = updatedBalls[i];
+        let j = updatedBalls.findIndex((ball2) => {
+            iterations++;
+            return ball1.id !== ball2.id && tester(ball1, ball2)
+        });
+        let ball2 = updatedBalls[j];
+        iterations++;
+        if (typeof ball2 !== 'undefined') {
+            let [updatedBall1, updatedBall2] = worker([ball1, ball2]);
+            updatedBalls[i] = updatedBall1;
+            updatedBalls[j] = updatedBall2;
+            i = 0;
+        }
+    }
+
+    console.log('collisionLoop2', iterations);
+
+    return updatedBalls;
+}
+
+function collisionLoop3(tester, worker, balls, ballPairs) {
+    let iterations = 0;
+    for(let i = 0; i < ballPairs.length; i++) {
+        let [ ball1Index, ball2Index ] = ballPairs[i];
+        let ball1 = balls[ball1Index];
+        let ball2 = balls[ball2Index];
+        iterations++;
+        if (tester(ball1, ball2)) {
+            let [updatedBall1, updatedBall2] = worker([ball1, ball2]);
+            balls[ball1Index] = updatedBall1;
+            balls[ball2Index] = updatedBall2;
+            i = 0;
+        }
+    }
+
+    console.log('collisionLoop3', iterations);
+
+    return balls;
+}
+
+function loop(universe, balls, ballPairs, collisionsWorker) {
     const start = (new Date()).getTime();
     const { GRAVITY, DENSITY_AIR, BALL_DRAG, POINT_5, dt, ONE_HUNDRED, ZERO, bounciness, dimensions } = universe;
     const updatedBalls = balls.map((ball, index, array) => {
@@ -246,31 +310,6 @@ function loop(universe, balls) {
         return new Ball(newPosition, newVelocity, ball.accelaration, ball.mass, ball.radius, ball.colour, ball.id);
     });
 
-    // const ballPairs = updatedBalls.reduce((accumulator, nextBall) => {
-    //     updatedBalls.forEach((otherBall) => {
-    //         if (!accumulator.find((ballPair) => ballPair.find(nextBall) && ballPair.find(otherBall))) {
-    //             accumulator.push([nextBall, otherBall]);
-    //         }
-    //     });
-    // },[])
-
-    function collisionLoop(updatedBalls) {
-        for(var i = 0; i < updatedBalls.length; i++) {
-            for(var j = 0; j < updatedBalls.length; j++) {
-                var ball1 = updatedBalls[i];
-                var ball2 = updatedBalls[j];
-                if (ball1.id !== ball2.id && cirleOverlaps(ball1, ball2)) {
-                    const [updatedBall1, updatedBall2] = objectCollisions([ball1, ball2]);
-                    updatedBalls[i] = updatedBall1;
-                    updatedBalls[j] = updatedBall2;
-                    i = 0;
-                    j = 0;
-                } 
-            }
-        }
-
-        return updatedBalls;
-    }
 
     // const collidingBalls = [];
     
@@ -296,26 +335,10 @@ function loop(universe, balls) {
     //     return accumulator.concat(objectCollisions(balls));
     // }, []);
 
-    const collidedBalls = collisionLoop(updatedBalls);
+    // collisionsWorker.postMessage({ type: 'calculate', balls: { balls:updatedBalls, ballPairs } });
 
-    const allBalls = collidedBalls.map((ball) => {
-        return wallCollisions(ball, ZERO, dimensions, bounciness);
-    });
-
-    const ballsMessage = {
-        type: 'balls',
-        balls: allBalls
-    };
-
-    const now = (new Date()).getTime();
-    const renderTime = now - start;
-    console.log(`Frame took ${now - start}ms to render`);
-    self.postMessage(ballsMessage);
-    if (renderTime > dt.x * 1000) {
-        setTimeout(loop.bind(null, universe, allBalls), renderTime);
-    } else {
-        setTimeout(loop.bind(null, universe, allBalls), dt.x * 1000);
-    }
+    const collidedBalls = collisionLoop3(cirleOverlaps, objectCollisions, updatedBalls, ballPairs);
+    handleCalculated(collidedBalls, ballPairs, universe);
 }
 
 self.onmessage = ({ data }) => {
@@ -350,6 +373,45 @@ self.onmessage = ({ data }) => {
             }
         }
 
-        loop(universe, balls);
+        const ballPairs = balls.reduce((accumulator, nextBall, index1) => {
+            balls.forEach((_, index2) => {
+                if (index1 !== index2 && !accumulator.find((ballPair) => {
+                    const contains1 = ballPair.includes(index1);
+                    const contains2 = ballPair.includes(index2);
+                    return contains1 && contains2;
+                })) {
+                    accumulator.push([index1, index2]);
+                }
+            });
+            return accumulator;
+        }, []);
+
+        const collisionsWorker = new Worker('collisions.js');
+
+        // collisionsWorker.onmessage = ({ data }) => {
+        //     if (data.type === 'calculated') {
+        //         const { balls: collidedBalls } = data;
+        //         handleCalculated(collidedBalls, ballPairs, universe, collisionsWorker);
+        //     }
+        // }
+
+        loop(universe, balls, ballPairs, collisionsWorker);
     }
+}
+
+function handleCalculated(collidedBalls, ballPairs, universe, collisionsWorker) {
+    const allBalls = collidedBalls.map((ball) => {
+        return wallCollisions(ball, universe.ZERO, universe.dimensions, universe.bounciness);
+    });
+
+    const ballsMessage = {
+        type: 'balls',
+        balls: allBalls
+    };
+
+    // const now = (new Date()).getTime();
+    // const renderTime = now - start;
+    // self.postMessage({ type: 'renderTime', time: renderTime });
+    self.postMessage(ballsMessage);
+    setTimeout(loop.bind(self, universe, allBalls, ballPairs, collisionsWorker), universe.dt.x * 1000);
 }

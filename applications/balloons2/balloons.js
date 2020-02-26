@@ -18,9 +18,17 @@ function draw(ctx, balls) {
 }
 
 const worker = new Worker('worker.js');
+const renderTimes = [];
 worker.onmessage = ({ data }) => {
 	if (data.type === 'balls') {
 		draw(ctx, data.balls);
+	}
+	if (data.type === 'renderTime') {
+		renderTimes.push(data.time);
+		const average = renderTimes.reduce((acc, next) => {
+			return acc + next;
+		}, 0) / renderTimes.length;
+		console.log(`Frame took ${data.time}ms, average ${average}ms to render`);
 	}
 };
 

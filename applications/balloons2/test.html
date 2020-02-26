@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+    <head>
+
+    </head>
+    <body>
+        <script type="module">
+            import { collisionLoop, collisionLoop2, collisionLoop3 } from './worker.js'
+
+            function ballPairs(balls) {
+                return balls.reduce((accumulator, nextBall, index1) => {
+                    balls.forEach((_, index2) => {
+                        if (index1 !== index2 && !accumulator.find((ballPair) => {
+                            const contains1 = ballPair.includes(index1);
+                            const contains2 = ballPair.includes(index2);
+                            return contains1 && contains2;
+                        })) {
+                            accumulator.push([index1, index2]);
+                        }
+                    });
+                    return accumulator;
+                }, []);
+            }
+
+
+            const testBalls = [1,2,3,4,5].map((itemid) => {
+                return { id: itemid };
+            });
+
+            const testBallPairs = ballPairs(testBalls);
+
+            function tester() {
+                return false;
+            }
+
+            function worker(balls) {
+                return balls;
+            }
+        
+            collisionLoop(tester, worker, testBalls, testBallPairs);
+            collisionLoop2(tester, worker, testBalls, testBallPairs);
+            collisionLoop3(tester, worker, testBalls, testBallPairs);
+        </script>
+    </body>
+</html>
