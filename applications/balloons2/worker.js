@@ -286,7 +286,31 @@ function collisionLoop3(tester, worker, balls, ballPairs) {
     return balls;
 }
 
-function loop(universe, balls, ballPairs, collisionsWorker) {
+function collisionLoop4(tester, worker, balls, ballPairs) {
+    let iterations = 0;
+    let needAnotherIteration = true;
+    while(needAnotherIteration) {
+        needAnotherIteration = false;
+        for(let i = 0; i < ballPairs.length; i++) {
+            let [ ball1Index, ball2Index ] = ballPairs[i];
+            let ball1 = balls[ball1Index];
+            let ball2 = balls[ball2Index];
+            iterations++;
+            if (tester(ball1, ball2)) {
+                let [updatedBall1, updatedBall2] = worker([ball1, ball2]);
+                balls[ball1Index] = updatedBall1;
+                balls[ball2Index] = updatedBall2;
+                needAnotherIteration = true;
+            }
+        }
+    }
+
+    console.log('collisionLoop4', iterations);
+
+    return balls;
+}
+
+function loop(universe, balls, ballPairs) {
     const start = (new Date()).getTime();
     const { GRAVITY, DENSITY_AIR, BALL_DRAG, POINT_5, dt, ONE_HUNDRED, ZERO, bounciness, dimensions } = universe;
     const updatedBalls = balls.map((ball, index, array) => {
@@ -337,7 +361,7 @@ function loop(universe, balls, ballPairs, collisionsWorker) {
 
     // collisionsWorker.postMessage({ type: 'calculate', balls: { balls:updatedBalls, ballPairs } });
 
-    const collidedBalls = collisionLoop3(cirleOverlaps, objectCollisions, updatedBalls, ballPairs);
+    const collidedBalls = collisionLoop4(cirleOverlaps, objectCollisions, updatedBalls, ballPairs);
     handleCalculated(collidedBalls, ballPairs, universe);
 }
 
@@ -386,7 +410,7 @@ self.onmessage = ({ data }) => {
             return accumulator;
         }, []);
 
-        const collisionsWorker = new Worker('collisions.js');
+        // const collisionsWorker = new Worker('collisions.js');
 
         // collisionsWorker.onmessage = ({ data }) => {
         //     if (data.type === 'calculated') {
@@ -395,11 +419,11 @@ self.onmessage = ({ data }) => {
         //     }
         // }
 
-        loop(universe, balls, ballPairs, collisionsWorker);
+        loop(universe, balls, ballPairs);
     }
 }
 
-function handleCalculated(collidedBalls, ballPairs, universe, collisionsWorker) {
+function handleCalculated(collidedBalls, ballPairs, universe) {
     const allBalls = collidedBalls.map((ball) => {
         return wallCollisions(ball, universe.ZERO, universe.dimensions, universe.bounciness);
     });
@@ -413,5 +437,5 @@ function handleCalculated(collidedBalls, ballPairs, universe, collisionsWorker) 
     // const renderTime = now - start;
     // self.postMessage({ type: 'renderTime', time: renderTime });
     self.postMessage(ballsMessage);
-    setTimeout(loop.bind(self, universe, allBalls, ballPairs, collisionsWorker), universe.dt.x * 1000);
+    setTimeout(loop.bind(self, universe, allBalls, ballPairs), universe.dt.x * 1000);
 }
