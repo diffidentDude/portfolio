@@ -17,7 +17,7 @@ function draw(ctx, balls) {
     ctx.closePath();
 }
 
-const worker = new Worker('worker.js');
+const worker = new Worker('worker.js', { type: "module" });
 const renderTimes = [];
 worker.onmessage = ({ data }) => {
 	if (data.type === 'balls') {
